@@ -11,42 +11,51 @@ Groupe : Yasmine, Colas, Théo et Juliette
 ### 📌 Consignes du projet :
 
 Projet déploiement applicatif dans Kubernetes
-Date : 2024 / 2025
-Mis à jour : 3/31/2025
-Fichier source (Github)
-Fichier source (Sourcehut)
-Exporter en PDF
+
 Installation du Cluster
+
 Exercice
+
 Mettre en place un petit cluster Kubernetes (1 control plane, 2 à 3 workers). On ne demande pas de déployer un vrai cluster de production !
+
 En cas d’installation on-premise, installer un Load Balancer MetalLB via Helm.
+
 Installer un IngressController, par exemple traefik ou ingress-nginx via Helm.
+
 Lien
+
 Pour plus d’information sur le déploiement d’un cluster Kubernetes, voir le projet dédié : https://www.avenel.pro/cours/docker/projet_install_kubernetes 🌎
+
 Voir aussi la page https://www.avenel.pro/cours/docker/kubernetes-cheatsheet 🌎 pour l’installation des dépendances.
+
 Installation des StorageClass
+
 En s’aidant de la cheatsheet Kubernetes, installer :
 
 Le NFS CSI driver for Kubernetes 🌎 pour créer automatiquement des PersistentVolume depuis un serveur NFS
+
 Le local-path-provisionner de Rancher 🌎 pour créer automatiquement des PersistentVolume basés sur hostPath (répertoires locaux aux Node : perte du Node = perte de la donnée !).
+
 Tip
+
 Pourquoi avoir besoin d’une StorageClass générant des PV locaux ?
 
 Beaucoup d’opérateurs créent des StatefulSets adaptées à la production : ceux-ci instancient des PersistentVolumeClaim pour référencer des PV, ce qui permet de générer dynamiquement des volumes depuis du storage (en principe distribué). Le local-path-provisionner permet de simuler cet usage en utilisant du storage local (et donc peu adapté à la production !)
 
 Tip
+
 Pour installer un serveur NFS simple on pourra utiliser une VM Ubuntu :
 
-#!/usr/bin/env bash
+"#!/usr/bin/env bash"
 
-# Installation et configuration d'un serveur NFS (dans une VM)
+Installation et configuration d'un serveur NFS (dans une VM)
 sudo apt install -y nfs-server
 sudo mkdir -p /data
 sudo /bin/sh -c 'echo "/data *(rw,sync,no_subtree_check,no_root_squash)" >> /etc/exports'
 sudo systemctl restart nfs-kernel-server
-## check
+"## check"
 sudo exportfs
-# /data           <world>
+"# /data           <world>"
 Vérifier la bonne installation des StorageClass :
 
 $ kubectl get storageclasses.storage.k8s.io
