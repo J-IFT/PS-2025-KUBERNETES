@@ -1,0 +1,22 @@
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: my-postgres
+  namespace: postgres-operator
+spec:
+  teamId: "myteam"
+  volume:
+    size: 1Gi
+  numberOfInstances: 1
+  users:
+    root:
+      - superuser
+      - createdb
+  databases:
+    mydb: database  # Nom de la base de données
+  postgresql:
+    version: "13"
+  enableLogicalBackup: false
+  enableMasterLoadBalancer: false
+  enableReplicaLoadBalancer: false
+  enableConnectionPooler: false
